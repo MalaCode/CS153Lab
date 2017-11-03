@@ -1,3 +1,5 @@
+#include <time.h>
+
 // Per-CPU state
 struct cpu {
   uchar apicid;                // Local APIC ID
@@ -49,10 +51,12 @@ struct proc {
   struct file *ofile[NOFILE];  // Open files
   struct inode *cwd;           // Current directory
   char name[16];               // Process name (debugging)
-  int exitStatus;	       // Exit Status
-  int procCounter;	       // Counter of processes waiting on curr process.
-  int priority;		       // priority for scheduler.
-  int waitingOn;	       // PID of process that it is waiting on
+  int exitStatus;	       // Exit Status, cs 153
+  int procCounter;	       // Counter of processes waiting on curr process, cs 153
+  int priority;		       // priority for scheduler, cs 153
+  int waitingOn;	       // PID of process that it is waiting on cs 153
+  volatile int startTime;      // process start time, cs 153
+  volatile int endTime;	       // process wait time, cs 153
 };
 
 // Process memory is laid out contiguously, low addresses first:

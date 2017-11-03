@@ -88,10 +88,13 @@ allocproc(void)
 found:
   p->state = EMBRYO;
   p->pid = nextpid++;
-  
-  p->priority = 1;
-  p->exitStatus = 0;
 
+//Added for Part 2  cs 153
+  p->priority = 1;
+//Added for 1.b cs 153
+  p->exitStatus = 0;
+//Added for Extra Credit 2 cs 153
+  p->startTime = ticks;
   release(&ptable.lock);
 
   // Allocate kernel stack.
@@ -233,10 +236,16 @@ exit(int currStatus)
   struct proc *curproc = myproc();
   struct proc *p;
   int fd;
+  int runtime;
 
+  //Added for Extra Credit 2 cs 153
+  runtime = ticks - curproc->startTime;
+  //Added for Part 1.a
   curproc->exitStatus = currStatus;
 
-
+  //Added for Extra Credit 2 cs 153
+  cprintf("Total wait time was %d\n", curproc->endTime);
+  cprintf("Total run time was %d\n", runtime);
 
   if(curproc == initproc)
     panic("init exiting");
@@ -259,6 +268,7 @@ exit(int currStatus)
    // Parent might be sleeping in wait().
   wakeup1(curproc->parent);
 
+   //Added for Part 1.C, waitpid cs 153
    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
     if(curproc->pid == p->waitingOn){
       wakeup1(p);
@@ -301,6 +311,7 @@ wait(int *status)
       if(p->state == ZOMBIE){
         // Found one.
         pid = p->pid;
+	//Added for part 1.b cs 153
 	if (status != 0)
 	{	
 	    *status = p->exitStatus;	
@@ -319,6 +330,7 @@ wait(int *status)
       else
       {
   	curproc->waitingOn = p->pid;
+	//Added for Extra Credit 1 cs 153
 	if (curproc->priority < p->priority)
 	{
 	  cprintf("Changing priority from %d to %d \n \n", p->priority, curproc->priority);	
@@ -360,11 +372,11 @@ scheduler(void)
 
    acquire(&ptable.lock);
    
-
+   //Added for Part 2 cs 153
    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
      if((p->priority < currMaxPriority) && (p->state == RUNNABLE))
     	currMaxPriority = p->priority;
-	//cprintf("chainging priority to %d\n", currMaxPriority);
+	cprintf("chainging priority to %d\n", currMaxPriority);
     }
     
     // Loop over process table looking for process to run.
@@ -373,16 +385,17 @@ scheduler(void)
 	{
        	 continue;
 	}
-       if(p->priority == currMaxPriority)
-       {	
-	    p->priority = currMaxPriority++;	
+	//Added for part 2 cs 153
+        if(p->priority == currMaxPriority)
+        {	
+//	    p->priority = currMaxPriority++;	
 	    // Switch to chosen process.  It is the process's job
       	    // to release ptable.lock and then reacquire it
             // before jumping back to us.
     	    c->proc = p;
 	    switchuvm(p);
       	    p->state = RUNNING;
-
+	    p->endTime = ticks - p->startTime;
       	    swtch(&(c->scheduler), p->context);
 	    switchkvm();
 	
@@ -577,6 +590,7 @@ procdump(void)
   }
 }
 
+//Added for Part 1.c, waitpid cs 153
 int waitpid(int pid, int *status, int options)
 {
   struct proc *p;
@@ -636,6 +650,7 @@ int waitpid(int pid, int *status, int options)
   }
 }
 
+//Added for Part 2, cs 153
 int setPriority(int priority)
 {
   acquire(&ptable.lock);

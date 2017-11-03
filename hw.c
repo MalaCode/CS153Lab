@@ -2,6 +2,8 @@
 //#include "stat.h"
 #include "user.h"
 
+
+//Entire main added as a test harness, cs 153
 int main(int argc, char *argv[])
 {
 	

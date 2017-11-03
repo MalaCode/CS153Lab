@@ -16,6 +16,7 @@ sys_fork(void)
 int
 sys_exit(void)
 {
+  //Changed for 1.a, cs 153
   int currStatus = 0;
   if (argint(0, &currStatus) > 0)
   {	
@@ -28,6 +29,7 @@ sys_exit(void)
 int
 sys_wait(void)
 {
+  //Changed for 1.b, cs 153
   int *status = 0;
   if (argptr(0, (char**)&status, sizeof(int)) > 0)
   {
@@ -100,6 +102,7 @@ sys_uptime(void)
   return xticks;
 }
 
+//Added for part 1.c, cs 153
 int sys_waitpid(void)
 {
   int pid = 0;
@@ -113,6 +116,7 @@ int sys_waitpid(void)
   return waitpid(pid, status, options);
 }
 
+//Added for Part 2, cs 153
 int sys_setPriority(void)
 {
 
