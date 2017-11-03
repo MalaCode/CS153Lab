@@ -238,11 +238,12 @@ exit(int currStatus)
   int fd;
   int runtime;
 
-  //Added for Extra Credit 2 cs 153
-  runtime = ticks - curproc->startTime;
   //Added for Part 1.a
   curproc->exitStatus = currStatus;
 
+
+  //Added for Extra Credit 2 cs 153
+  runtime = ticks - curproc->startTime;
   //Added for Extra Credit 2 cs 153
   cprintf("Total wait time was %d\n", curproc->endTime);
   cprintf("Total run time was %d\n", runtime);
@@ -376,7 +377,7 @@ scheduler(void)
    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
      if((p->priority < currMaxPriority) && (p->state == RUNNABLE))
     	currMaxPriority = p->priority;
-	cprintf("chainging priority to %d\n", currMaxPriority);
+//	cprintf("chainging priority to %d\n", currMaxPriority);
     }
     
     // Loop over process table looking for process to run.
@@ -388,7 +389,7 @@ scheduler(void)
 	//Added for part 2 cs 153
         if(p->priority == currMaxPriority)
         {	
-//	    p->priority = currMaxPriority++;	
+	    p->priority = currMaxPriority++;	
 	    // Switch to chosen process.  It is the process's job
       	    // to release ptable.lock and then reacquire it
             // before jumping back to us.
@@ -632,7 +633,7 @@ int waitpid(int pid, int *status, int options)
 	curproc->waitingOn = p->pid;
  	if (curproc->priority < p->priority)
 	{
-	  cprintf("Changing priority from %d to %d \n \n", p->priority, curproc->priority);
+//	  cprintf("Changing priority from %d to %d \n \n", p->priority, curproc->priority);
 	  p->priority = curproc->priority;
 	} 
 
