@@ -236,17 +236,17 @@ exit(int currStatus)
   struct proc *curproc = myproc();
   struct proc *p;
   int fd;
-  int runtime;
+//  int runtime;
 
   //Added for Part 1.a
   curproc->exitStatus = currStatus;
 
 
   //Added for Extra Credit 2 cs 153
-  runtime = ticks - curproc->startTime;
+  //runtime = ticks - curproc->startTime;
   //Added for Extra Credit 2 cs 153
-  cprintf("Total wait time was %d\n", curproc->endTime);
-  cprintf("Total run time was %d\n", runtime);
+  //cprintf("Total wait time was %d\n", curproc->endTime);
+  //cprintf("Total run time was %d\n", runtime);
 
   if(curproc == initproc)
     panic("init exiting");
@@ -332,12 +332,12 @@ wait(int *status)
       {
   	curproc->waitingOn = p->pid;
 	//Added for Extra Credit 1 cs 153
-	if (curproc->priority < p->priority)
+/*	if (curproc->priority < p->priority)
 	{
 	  cprintf("Changing priority from %d to %d \n \n", p->priority, curproc->priority);	
 	  p->priority = curproc->priority;
 	}
-
+*/
       }
     }
 
@@ -631,12 +631,12 @@ int waitpid(int pid, int *status, int options)
       else
       {
 	curproc->waitingOn = p->pid;
- 	if (curproc->priority < p->priority)
+/* 	if (curproc->priority < p->priority)
 	{
 //	  cprintf("Changing priority from %d to %d \n \n", p->priority, curproc->priority);
 	  p->priority = curproc->priority;
 	} 
-
+*/
       }
     }
 
